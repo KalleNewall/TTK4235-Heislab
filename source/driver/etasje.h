@@ -1,0 +1,6 @@
+struct Etasje{
+    int nummer;
+    
+
+
+};
