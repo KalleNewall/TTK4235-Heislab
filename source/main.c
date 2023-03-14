@@ -16,7 +16,7 @@ int main(){
 
 
 
-    while(1)
+  while(1)
     {
         while (heis->prioriteringsko[0] == 0)
         {
@@ -24,6 +24,8 @@ int main(){
         }
         feilsideavretn(heis);
         oppdatertarget(heis);
+       
+        
         
         getRetning(heis);
         startHeis(heis);
@@ -39,3 +41,4 @@ int main(){
 
     return 0;
 }
+
