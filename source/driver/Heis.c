@@ -20,7 +20,10 @@ void nullstillko(struct Heis* h){
 }
 
 void getFloor(struct Heis* h){
-    h->currentFloor = elevio_floorSensor(); // Flagge slik at vi kun endrer når vi kommer i ny etasje
+    if (elevio_floorSensor() != -1) 
+    {
+        h->currentFloor = elevio_floorSensor(); // Flagge slik at vi kun endrer når vi kommer i ny etasje
+    }
 }
 
 
@@ -81,6 +84,7 @@ void stoppEtasje(struct Heis* h){
     h->aktiv = 0;
 // FUnkjson som starter timer     
 //    StartTimer();
+// Mens dør er åpen må vi oppdatere knapper, oppdatere target og sjekke stoppknapp
 // Funksjon som oppdaterer target
     fjernfrako(h);
     startHeis(h);
@@ -169,9 +173,12 @@ void reorderque(struct Heis* h){
 
 
 void feilsideavretn(struct Heis* h){
+    int endre = 0;
     if ((h->prioriteringsko[0] > 4) && ((h->prioriteringsko[0] - 4) < h->currentFloor)){
+        int endre = 1;
         elevio_motorDirection(-1);
         h->aktiv = 1;
+
         while (h->currentFloor != (h->prioriteringsko[0] - 4))
         {
             getFloor(h);
@@ -181,9 +188,11 @@ void feilsideavretn(struct Heis* h){
         }
         elevio_motorDirection(0);
         h->aktiv = 0;
+        stoppEtasje(h);
     }  
 
     if ((h->prioriteringsko[0] < 5) && (h->prioriteringsko[0] > h->currentFloor)){
+        int endre = 1;
         elevio_motorDirection(1);
         h->aktiv = 1;
         while (h->currentFloor != (h->prioriteringsko[0] - 4))
@@ -194,7 +203,12 @@ void feilsideavretn(struct Heis* h){
         }
         elevio_motorDirection(0);
         h->aktiv = 0;
-    }  
+        stoppEtasje(h);
+    } 
+    if (endre == 0)
+    {
+        h->targetFloor = h->prioriteringsko[0];
+    }   
 }
 
 
